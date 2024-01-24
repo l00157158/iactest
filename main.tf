@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "us-east-1"
+  region = "us-east-2"
 }
 
 resource "aws_vpc" "my_vpc" {
@@ -7,7 +7,7 @@ resource "aws_vpc" "my_vpc" {
   enable_dns_hostnames = true
 
   tags = {
-    Name = "MyVPC"
+    Name = "Jimmy-VPC"
   }
 }
 
@@ -17,7 +17,7 @@ resource "aws_subnet" "my_subnet_1" {
   availability_zone = "us-east-1a"
 
   tags = {
-    Name = "MySubnet1"
+    Name = "Jimmy-Subnet1"
   }
 }
 
@@ -27,7 +27,16 @@ resource "aws_subnet" "my_subnet_2" {
   availability_zone = "us-east-1b"
 
   tags = {
-    Name = "MySubnet2"
+    Name = "Jimmy-Subnet2"
   }
 }
- 
+# Configuration for the TF State file in S3 and Dynamo DB for state lcoking -
+terraform {
+  backend "s3" {
+    bucket        = "tf-state-for-jimmy"
+    key           = "my-environment/terraform.tfstate"
+    region        = "us-east-2"
+    dynamodb_table = "tf-lock"  
+    encrypt       = true
+  }
+}
